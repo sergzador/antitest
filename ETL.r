@@ -63,9 +63,9 @@ replace_na <- function(inp) {
 
 
 
-sync_web_to_db <-function(db_server_name, db_name,db_username, db_password) {
+sync_web_to_db <-function(conn) {
+# takes RODBC connection object as argument
 #create connection to DB
-conn <- connect_mssql(db_server_name, db_name, db_username, db_password)
 
 #create dataframe with xpath for every table name
 df_table_xpath <- data.frame(table_name=character(), 
@@ -269,8 +269,9 @@ if(dim(df_prior_close_db)[1] == 0) {
  print(paste("EXECUTED:",update_query))
 }
 }
-odbcClose(conn)
 }
 
 #call this function to extract data from web page, compare it to SQLServer DB and update the DB if required.
-sync_web_to_db('vm-windows\\SQLEXPRESS','INVDB','RUSER','Welcome@toSQL2022')
+sync_web_to_db(conn)
+
+odbcClose(conn)
